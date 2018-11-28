@@ -79,6 +79,7 @@ class Stopwatch {
       window.clearInterval(this.interval);
     }
 
+    startButton.textContent = "Resume";
     this.interval = window.setInterval(this.tick, 10);
   }
 
@@ -92,7 +93,7 @@ class Stopwatch {
     if (this.interval) {
       window.clearInterval(this.interval);
     }
-
+    startButton.textContent = "Start";
     this.time.ms = 0;
     this.time.seconds = 0;
     this.time.minutes = 0;
@@ -103,7 +104,6 @@ class Stopwatch {
 }
 
 const stopwatch = new Stopwatch();
-
 startButton.addEventListener("click", stopwatch.start);
 pauseButton.addEventListener("click", stopwatch.pause);
 resetButton.addEventListener("click", stopwatch.reset);
