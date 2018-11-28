@@ -1,6 +1,7 @@
 const startButton = document.querySelector(".start");
 const pauseButton = document.querySelector(".pause");
 const resetButton = document.querySelector(".reset");
+const timeText = document.querySelector(".time");
 
 class Stopwatch {
   constructor() {
@@ -14,7 +15,7 @@ class Stopwatch {
     this.interval = null;
 
     this.tick = this.tick.bind(this);
-    this.updateCock = this.updateClock.bind(this);
+    this.updateClock = this.updateClock.bind(this);
     this.start = this.start.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
@@ -48,6 +49,7 @@ class Stopwatch {
 
   tick() {
     this.updateClock();
+    this.updateDOM();
   }
 
   updateClock() {
@@ -69,7 +71,7 @@ class Stopwatch {
   }
 
   updateDOM() {
-    do
+    timeText.textContent = this.getTime();
   }
 
   start() {
@@ -95,11 +97,12 @@ class Stopwatch {
     this.time.seconds = 0;
     this.time.minutes = 0;
     this.time.hours = 0;
+
+    this.updateDOM();
   }
 }
 
 const stopwatch = new Stopwatch();
-window.setInterval(() => console.log(stopwatch.getTime()), 100);
 
 startButton.addEventListener("click", stopwatch.start);
 pauseButton.addEventListener("click", stopwatch.pause);
