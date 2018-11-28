@@ -11,7 +11,6 @@ class Stopwatch {
       minutes: 0,
       hours: 0,
     };
-    this.isTicking = false;
     this.interval = null;
 
     this.tick = this.tick.bind(this);
@@ -104,6 +103,7 @@ class Stopwatch {
 }
 
 const stopwatch = new Stopwatch();
+
 startButton.addEventListener("click", stopwatch.start);
 pauseButton.addEventListener("click", stopwatch.pause);
 resetButton.addEventListener("click", stopwatch.reset);
