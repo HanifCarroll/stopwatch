@@ -157,6 +157,13 @@ function createNewSW() {
   newStartButton.textContent = "Start";
   newResetButton.textContent = "Reset";
 
+  // Set classes on new elements.
+  newSection.classList.add("stopwatch");
+  newTimeText.classList.add("time");
+  newButtonDiv.classList.add("buttons");
+  newStartButton.classList.add("start");
+  newResetButton.classList.add("reset");
+
   // Create stopwatch and connect elements.
   const newStopwatch = new Stopwatch();
   newStopwatch.startButton = newStartButton;
