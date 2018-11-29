@@ -1,6 +1,7 @@
 const startButton = document.querySelector(".start");
 const resetButton = document.querySelector(".reset");
 const timeText = document.querySelector(".time");
+const addSWButton = document.querySelector(".add");
 
 class Stopwatch {
   constructor() {
@@ -20,7 +21,7 @@ class Stopwatch {
     this.start = this.start.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
-    this.setButtonEventListener = this.setButtonEventListener.bind(this);
+    this.onStartClick = this.onStartClick.bind(this);
   }
 
   getTime() {
@@ -133,3 +134,21 @@ const stopwatch = new Stopwatch();
 
 startButton.addEventListener("click", stopwatch.onStartClick);
 resetButton.addEventListener("click", stopwatch.reset);
+addSWButton.addEventListener("click", createNewSW);
+
+function createNewSW() {
+  const section = document.createElement("section");
+  const timeText = document.createElement("p");
+  const buttonDiv = document.createElement("div");
+  const startButton = document.createElement("button");
+  const resetButton = document.createElement("button");
+
+  timeText.textContent = "00:00:00";
+  startButton.textContent = "Start";
+  resetButton.textContent = "Reset";
+
+  buttonDiv.append(startButton, resetButton);
+  section.append(timeText, buttonDiv);
+
+  document.body.append(section);
+}
