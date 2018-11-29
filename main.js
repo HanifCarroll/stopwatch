@@ -1,5 +1,4 @@
 const startButton = document.querySelector(".start");
-const pauseButton = document.querySelector(".pause");
 const resetButton = document.querySelector(".reset");
 const timeText = document.querySelector(".time");
 
@@ -80,7 +79,6 @@ class Stopwatch {
   start() {
     if (this.interval) {
       window.clearInterval(this.interval);
-      // this.setButtonEventListener();
     }
 
     this.interval = window.setInterval(this.tick, 10);
@@ -94,7 +92,6 @@ class Stopwatch {
       window.clearInterval(this.interval);
       this.isTicking = false;
       this.setButtonText();
-      // this.setButtonEventListener();
     }
   }
 
