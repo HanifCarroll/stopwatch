@@ -192,17 +192,23 @@ function createNewSW() {
   newButtonDiv.append(newStartButton, newResetButton);
   newSection.append(newTimeText, newButtonDiv);
 
-  // Append newly created section to the body.
-  document.body.append(newSection);
+  // Append newly created section to the stopwatches section.
+  const stopwatchesSection = document.querySelector(".stopwatches");
+  stopwatchesSection.append(newSection);
 }
 
 function removeSW() {
-  const [lastStopwatch] = document.querySelectorAll(".stopwatch:last-child");
-  document.body.removeChild(lastStopwatch);
+  const stopwatchesSection = document.querySelector(".stopwatches");
 
-  let deletedStopwatch = stopwatches[stopwatches.length - 1];
-  deletedStopwatch.cleanUp();
-  stopwatches[stopwatches.length - 1] = null;
+  const stopwatchSections = document.querySelectorAll(".stopwatch");
+  if (stopwatchSections.length > 1) {
+    const lastStopwatch = stopwatchSections[stopwatchSections.length - 1];
+    stopwatchesSection.removeChild(lastStopwatch);
 
-  stopwatches.pop();
+    let deletedStopwatch = stopwatches[stopwatches.length - 1];
+    deletedStopwatch.cleanUp();
+    stopwatches[stopwatches.length - 1] = null;
+
+    stopwatches.pop();
+  }
 }
