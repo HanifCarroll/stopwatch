@@ -46,7 +46,9 @@ button:active {
 }
 
 .add,
-.remove {
+.remove,
+.start-all,
+.reset-all {
   line-height: 1.2;
   padding: 15px;
 }

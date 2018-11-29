@@ -1,3 +1,13 @@
+// All of the relevant elements.
+const startButton = document.querySelector(".start");
+const resetButton = document.querySelector(".reset");
+const startAllButton = document.querySelector(".start-all");
+const resetAllButton = document.querySelector(".reset-all");
+const timeText = document.querySelector(".time");
+const addSWButton = document.querySelector(".add");
+const removeSWButton = document.querySelector(".remove");
+
+// Stopwatch and StopwatchContainer classes
 class Stopwatch {
   constructor() {
     this.time = {
@@ -137,16 +147,65 @@ class Stopwatch {
   }
 }
 
-// Set-up the initial page view.
-const startButton = document.querySelector(".start");
-const resetButton = document.querySelector(".reset");
-const timeText = document.querySelector(".time");
-const addSWButton = document.querySelector(".add");
-const removeSWButton = document.querySelector(".remove");
+class StopwatchContainer {
+  constructor() {
+    this.stopwatches = [];
 
-const stopwatches = [];
+    this.push = this.push.bind(this);
+    this.pop = this.pop.bind(this);
+    this.startAllWatches = this.startAllWatches.bind(this);
+    this.resetAllWatches = this.resetAllWatches.bind(this);
+    this.areAnyWatchesTicking = this.areAnyWatchesTicking.bind(this);
+  }
+
+  push(stopwatch) {
+    this.stopwatches.push(stopwatch);
+  }
+
+  pop() {
+    let deletedStopwatch = this.stopwatches[this.stopwatches.length - 1];
+    deletedStopwatch.cleanUp();
+    this.stopwatches[this.stopwatches.length - 1] = null;
+
+    this.stopwatches.pop();
+  }
+
+  startAllWatches() {
+    if (!this.areAnyWatchesTicking()) {
+      this.stopwatches.forEach(sw => {
+        sw.start();
+      });
+      startAllButton.textContent = "Pause All";
+    } else {
+      this.stopwatches.forEach(sw => {
+        sw.pause();
+      });
+      startAllButton.textContent = "Start All";
+    }
+  }
+
+  resetAllWatches() {
+    this.stopwatches.forEach(sw => sw.reset());
+  }
+
+  areAnyWatchesTicking() {
+    let status = false;
+
+    this.stopwatches.forEach(sw => {
+      if (sw.isTicking) {
+        status = true;
+      }
+    });
+
+    return status;
+  }
+}
+
+// Set-up the initial page view.
+
+const stopwatchContainer = new StopwatchContainer();
 const stopwatch = new Stopwatch();
-stopwatches.push(stopwatch);
+stopwatchContainer.push(stopwatch);
 
 stopwatch.timeText = timeText;
 stopwatch.startButton = startButton;
@@ -154,6 +213,8 @@ stopwatch.resetButton = resetButton;
 
 startButton.addEventListener("click", stopwatch.onStartClick);
 resetButton.addEventListener("click", stopwatch.reset);
+startAllButton.addEventListener("click", stopwatchContainer.startAllWatches);
+resetAllButton.addEventListener("click", stopwatchContainer.resetAllWatches);
 addSWButton.addEventListener("click", createNewSW);
 removeSWButton.addEventListener("click", removeSW);
 
@@ -179,7 +240,7 @@ function createNewSW() {
 
   // Create stopwatch and connect new elements to the instance.
   const newStopwatch = new Stopwatch();
-  stopwatches.push(newStopwatch);
+  stopwatchContainer.push(newStopwatch);
   newStopwatch.startButton = newStartButton;
   newStopwatch.resetButton = newResetButton;
   newStopwatch.timeText = newTimeText;
@@ -205,10 +266,6 @@ function removeSW() {
     const lastStopwatch = stopwatchSections[stopwatchSections.length - 1];
     stopwatchesSection.removeChild(lastStopwatch);
 
-    let deletedStopwatch = stopwatches[stopwatches.length - 1];
-    deletedStopwatch.cleanUp();
-    stopwatches[stopwatches.length - 1] = null;
-
-    stopwatches.pop();
+    stopwatchContainer.pop();
   }
 }
