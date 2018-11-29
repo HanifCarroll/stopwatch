@@ -21,6 +21,7 @@ class Stopwatch {
     this.start = this.start.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
+    this.setButtonEventListener = this.setButtonEventListener.bind(this);
   }
 
   getTime() {
@@ -79,12 +80,13 @@ class Stopwatch {
   start() {
     if (this.interval) {
       window.clearInterval(this.interval);
+      // this.setButtonEventListener();
     }
 
+    this.interval = window.setInterval(this.tick, 10);
     this.isStarted = true;
     this.isTicking = true;
     this.setButtonText();
-    this.interval = window.setInterval(this.tick, 10);
   }
 
   pause() {
@@ -92,6 +94,7 @@ class Stopwatch {
       window.clearInterval(this.interval);
       this.isTicking = false;
       this.setButtonText();
+      // this.setButtonEventListener();
     }
   }
 
@@ -123,10 +126,13 @@ class Stopwatch {
       startButton.textContent = "Pause";
     }
   }
+
+  onStartClick() {
+    startButton.textContent === "Pause" ? this.pause() : this.start();
+  }
 }
 
 const stopwatch = new Stopwatch();
 
-startButton.addEventListener("click", stopwatch.start);
-pauseButton.addEventListener("click", stopwatch.pause);
+startButton.addEventListener("click", stopwatch.onStartClick);
 resetButton.addEventListener("click", stopwatch.reset);
