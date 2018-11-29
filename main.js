@@ -21,6 +21,7 @@ class Stopwatch {
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
     this.onStartClick = this.onStartClick.bind(this);
+    this.cleanUp = this.cleanUp.bind(this);
   }
 
   getTime() {
@@ -78,18 +79,19 @@ class Stopwatch {
 
   start() {
     if (this.interval) {
-      window.clearInterval(this.interval);
+      this.cleanUp();
     }
 
     this.interval = window.setInterval(this.tick, 10);
     this.isStarted = true;
     this.isTicking = true;
+
     this.setButtonText();
   }
 
   pause() {
     if (this.interval) {
-      window.clearInterval(this.interval);
+      this.cleanUp();
       this.isTicking = false;
       this.setButtonText();
     }
@@ -97,17 +99,23 @@ class Stopwatch {
 
   reset() {
     if (this.interval) {
-      window.clearInterval(this.interval);
+      this.cleanUp();
     }
+
     this.isStarted = false;
     this.isTicking = false;
     this.setButtonText();
+
     this.time.ms = 0;
     this.time.seconds = 0;
     this.time.minutes = 0;
     this.time.hours = 0;
 
     this.updateDOM();
+  }
+
+  cleanUp() {
+    window.clearInterval(this.interval);
   }
 
   setButtonText() {
@@ -129,12 +137,16 @@ class Stopwatch {
   }
 }
 
-// Set-up the initial stopwatch.
+// Set-up the initial page view.
 const startButton = document.querySelector(".start");
 const resetButton = document.querySelector(".reset");
 const timeText = document.querySelector(".time");
 const addSWButton = document.querySelector(".add");
+const removeSWButton = document.querySelector(".remove");
+
+const stopwatches = [];
 const stopwatch = new Stopwatch();
+stopwatches.push(stopwatch);
 
 stopwatch.timeText = timeText;
 stopwatch.startButton = startButton;
@@ -143,6 +155,7 @@ stopwatch.resetButton = resetButton;
 startButton.addEventListener("click", stopwatch.onStartClick);
 resetButton.addEventListener("click", stopwatch.reset);
 addSWButton.addEventListener("click", createNewSW);
+removeSWButton.addEventListener("click", removeSW);
 
 function createNewSW() {
   // Create new elements.
@@ -164,8 +177,9 @@ function createNewSW() {
   newStartButton.classList.add("start");
   newResetButton.classList.add("reset");
 
-  // Create stopwatch and connect elements.
+  // Create stopwatch and connect new elements to the instance.
   const newStopwatch = new Stopwatch();
+  stopwatches.push(newStopwatch);
   newStopwatch.startButton = newStartButton;
   newStopwatch.resetButton = newResetButton;
   newStopwatch.timeText = newTimeText;
@@ -180,4 +194,15 @@ function createNewSW() {
 
   // Append newly created section to the body.
   document.body.append(newSection);
+}
+
+function removeSW() {
+  const [lastStopwatch] = document.querySelectorAll(".stopwatch:last-child");
+  document.body.removeChild(lastStopwatch);
+
+  let deletedStopwatch = stopwatches[stopwatches.length - 1];
+  deletedStopwatch.cleanUp();
+  stopwatches[stopwatches.length - 1] = null;
+
+  stopwatches.pop();
 }
