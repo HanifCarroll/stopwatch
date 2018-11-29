@@ -12,9 +12,12 @@ class Stopwatch {
       hours: 0,
     };
     this.interval = null;
+    this.isStarted = false;
+    this.isTicking = false;
 
     this.tick = this.tick.bind(this);
     this.updateClock = this.updateClock.bind(this);
+    this.setButtonText = this.setButtonText.bind(this);
     this.start = this.start.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
@@ -78,13 +81,17 @@ class Stopwatch {
       window.clearInterval(this.interval);
     }
 
-    startButton.textContent = "Resume";
+    this.isStarted = true;
+    this.isTicking = true;
+    this.setButtonText();
     this.interval = window.setInterval(this.tick, 10);
   }
 
   pause() {
     if (this.interval) {
       window.clearInterval(this.interval);
+      this.isTicking = false;
+      this.setButtonText();
     }
   }
 
@@ -92,13 +99,29 @@ class Stopwatch {
     if (this.interval) {
       window.clearInterval(this.interval);
     }
-    startButton.textContent = "Start";
+    this.isStarted = false;
+    this.isTicking = false;
+    this.setButtonText();
     this.time.ms = 0;
     this.time.seconds = 0;
     this.time.minutes = 0;
     this.time.hours = 0;
 
     this.updateDOM();
+  }
+
+  setButtonText() {
+    if (!this.isTicking && !this.isStarted) {
+      startButton.textContent = "Start";
+    }
+
+    if (!this.isTicking && this.isStarted) {
+      startButton.textContent = "Resume";
+    }
+
+    if (this.isTicking) {
+      startButton.textContent = "Pause";
+    }
   }
 }
 
