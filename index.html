@@ -4,17 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="style.css" />
     <title>Stopwatch</title>
   </head>
   <body>
-    <h1>Stopwatch!</h1>
-    <button class="add">Add Stopwatch</button>
-    <button class="remove">Remove Stopwatch</button>
+    <h1 class="title">Time-It!</h1>
+    <div class="page-buttons">
+      <button class="add button">Add Stopwatch</button>
+      <button class="remove button">Remove Stopwatch</button>
+    </div>
     <section class="stopwatch">
-      <p class="time">00:00:00</p>
+      <p class="time">00:00:00:00</p>
       <div class="buttons">
-        <button class="start">Start</button>
-        <button class="reset">Reset</button>
+        <button class="start button">Start</button>
+        <button class="reset button">Reset</button>
       </div>
     </section>
     <script src="main.js"></script>
