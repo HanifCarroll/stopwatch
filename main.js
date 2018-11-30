@@ -306,10 +306,8 @@ function removeSW() {
 function switchLights() {
   isDarkModeEnabled = !isDarkModeEnabled;
 
-  const startButtons = document.querySelectorAll(".start-timer");
-  const pauseButtons = document.querySelectorAll(".stop-timer");
   const buttons = document.querySelectorAll("button");
-  const body = document.body;
+  const { body } = document;
 
   if (isDarkModeEnabled) {
     lightSwitch.textContent = "Light Mode";

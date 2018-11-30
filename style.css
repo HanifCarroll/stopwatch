@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono|Roboto:300|Mina:100");
+@import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono|Roboto:300");
 
 * {
   margin: 0;
@@ -9,11 +9,6 @@
 body {
   color: rgb(54, 54, 54);
   background: #ece4d8;
-}
-
-.light-switch-container {
-  margin-top: 20px;
-  text-align: center;
 }
 
 .stopwatches {
@@ -71,6 +66,7 @@ button:active {
   transform: translateY(3px);
 }
 
+/* Page Controls */
 .page-buttons {
   display: grid;
   grid-template-areas:
@@ -121,7 +117,9 @@ button:active {
 .remove {
   min-width: 130px;
 }
+/* Page Controls */
 
+/* Stopwatches */
 .stopwatch {
   width: 90%;
   margin: 0 auto;
@@ -176,6 +174,7 @@ button:active {
   font-size: 3em;
   margin-bottom: 15px;
 }
+/* Stopwatches */
 
 /* Dark Mode Elements */
 .dark-body {
@@ -194,3 +193,4 @@ button:active {
   background-color: white;
   color: rgb(42, 42, 42);
 }
+/* Dark Mode Elements */
