@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono");
+@import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono|Roboto:300|Mina:100");
 
 * {
   margin: 0;
@@ -7,7 +7,7 @@
 }
 
 body {
-  color: black;
+  color: rgb(54, 54, 54);
   background: #ece4d8;
 }
 
@@ -25,16 +25,29 @@ body {
 
 .title {
   text-align: center;
-  font-size: 3em;
+  font-size: 3.5em;
   margin-top: 30px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  text-transform: uppercase;
+}
+
+@media (min-width: 750px) {
+  .title {
+    font-size: 6em;
+    letter-spacing: 2;
+  }
 }
 
 button {
   border: 1px solid black;
+  color: rgb(54, 54, 54);
   background: transparent;
   border-radius: 10px;
   transition-duration: 50ms;
   font-size: 1.2em;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
 }
 
 button:hover {
