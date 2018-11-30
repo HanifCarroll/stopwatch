@@ -136,19 +136,26 @@ class Stopwatch {
   setButtonText() {
     if (!this.isTicking && !this.isStarted) {
       this.startButton.textContent = "Start";
+      this.startButton.classList.remove("stop-timer");
+      this.startButton.classList.add("start-timer");
     }
 
     if (!this.isTicking && this.isStarted) {
       this.startButton.textContent = "Resume";
+      this.startButton.classList.remove("stop-timer");
+      this.startButton.classList.add("start-timer");
     }
 
     if (this.isTicking) {
       this.startButton.textContent = "Pause";
+      this.startButton.classList.remove("start-timer");
+      this.startButton.classList.add("stop-timer");
     }
   }
 
   onStartClick() {
     this.startButton.textContent === "Pause" ? this.pause() : this.start();
+
     this.forceContainerUpdate();
   }
 
@@ -254,7 +261,7 @@ function createNewSW() {
   newSection.classList.add("stopwatch");
   newTimeText.classList.add("time");
   newButtonDiv.classList.add("buttons");
-  newStartButton.classList.add("start", "button");
+  newStartButton.classList.add("start", "button", "start-timer");
   newResetButton.classList.add("reset", "button");
 
   // Create stopwatch and connect new elements to the instance.
