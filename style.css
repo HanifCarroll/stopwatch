@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Share+Tech+Mono");
+
 * {
   margin: 0;
   padding: 0;
@@ -9,6 +11,10 @@ body {
   background: #ece4d8;
 }
 
+.stopwatches {
+  margin-bottom: 30px;
+}
+
 @media (min-width: 750px) {
   .stopwatches {
     display: flex;
@@ -16,6 +22,7 @@ body {
     justify-content: flex-start;
   }
 }
+
 .title {
   text-align: center;
   font-size: 3em;
@@ -53,14 +60,18 @@ button:active {
   padding: 15px;
 }
 
-@media (min-width: 750px) {
-  .add,
-  .remove {
-    min-width: 250px;
-  }
+.start-all,
+.reset-all {
+  min-width: 120px;
 }
 
-.add {
+.add,
+.remove {
+  min-width: 130px;
+}
+
+.add,
+.start-all {
   margin-right: 15px;
 }
 
@@ -96,7 +107,7 @@ button:active {
 }
 
 .time {
-  font-family: monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 3em;
   margin-bottom: 15px;
 }
