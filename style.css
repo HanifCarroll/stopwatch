@@ -208,14 +208,13 @@ body {
 }
 
 .dark-button {
-  border: 2px solid rgb(255, 255, 255);
+  border: 2px solid rgb(204, 204, 204);
   color: rgb(204, 204, 204);
-  background: transparent;
 }
 
 .dark-button:hover,
 .page-buttons > .dark-button:hover {
-  background-color: white;
+  background-color: rgb(204, 204, 204);
   color: rgb(42, 42, 42);
 }
 /* Dark Mode Elements */
