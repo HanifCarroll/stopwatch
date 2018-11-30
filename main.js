@@ -1,11 +1,13 @@
+let isDarkModeEnabled = false;
 // All of the relevant elements.
+const lightSwitch = document.querySelector(".light-switch");
+const addSWButton = document.querySelector(".add");
+const removeSWButton = document.querySelector(".remove");
+const startAllButton = document.querySelector(".start-all");
+const resetAllButton = document.querySelector(".reset-all");
 const timeText = document.querySelector(".time");
 const startButton = document.querySelector(".start");
 const resetButton = document.querySelector(".reset");
-const startAllButton = document.querySelector(".start-all");
-const resetAllButton = document.querySelector(".reset-all");
-const addSWButton = document.querySelector(".add");
-const removeSWButton = document.querySelector(".remove");
 
 // Stopwatch and StopwatchContainer classes
 class Stopwatch {
@@ -235,12 +237,13 @@ stopwatch.timeText = timeText;
 stopwatch.startButton = startButton;
 stopwatch.resetButton = resetButton;
 
-startButton.addEventListener("click", stopwatch.onStartClick);
-resetButton.addEventListener("click", stopwatch.reset);
+lightSwitch.addEventListener("click", switchLights);
 startAllButton.addEventListener("click", stopwatchContainer.startAllWatches);
 resetAllButton.addEventListener("click", stopwatchContainer.resetAllWatches);
 addSWButton.addEventListener("click", createNewSW);
 removeSWButton.addEventListener("click", removeSW);
+startButton.addEventListener("click", stopwatch.onStartClick);
+resetButton.addEventListener("click", stopwatch.reset);
 
 function createNewSW() {
   // Create new elements.
@@ -259,8 +262,12 @@ function createNewSW() {
   newSection.classList.add("stopwatch");
   newTimeText.classList.add("time");
   newButtonDiv.classList.add("buttons");
-  newStartButton.classList.add("start", "button", "start-timer");
-  newResetButton.classList.add("reset", "button");
+  newStartButton.classList.add("start", "start-timer");
+  if (isDarkModeEnabled) {
+    newResetButton.classList.add("reset", "dark-button");
+  } else {
+    newResetButton.classList.add("reset");
+  }
 
   // Create stopwatch and connect new elements to the instance.
   const newStopwatch = new Stopwatch(stopwatchContainer);
@@ -286,12 +293,46 @@ function createNewSW() {
 
 function removeSW() {
   const stopwatchesSection = document.querySelector(".stopwatches");
-
   const stopwatchSections = document.querySelectorAll(".stopwatch");
+
   if (stopwatchSections.length > 1) {
     const lastStopwatch = stopwatchSections[stopwatchSections.length - 1];
     stopwatchesSection.removeChild(lastStopwatch);
 
     stopwatchContainer.pop();
   }
+}
+
+function switchLights() {
+  isDarkModeEnabled = !isDarkModeEnabled;
+
+  const startButtons = document.querySelectorAll(".start-timer");
+  const pauseButtons = document.querySelectorAll(".stop-timer");
+  const buttons = document.querySelectorAll("button");
+  const body = document.body;
+
+  if (isDarkModeEnabled) {
+    lightSwitch.textContent = "Light Mode";
+    body.classList.add("dark-body");
+    addClassToButtons(buttons, "dark-button");
+  } else {
+    lightSwitch.textContent = "Dark Mode";
+    body.classList.remove("dark-body");
+    removeClassFromButtons(buttons, "dark-button");
+  }
+}
+
+function addClassToButtons(elements, className) {
+  elements.forEach(el => {
+    if (
+      !el.classList.contains("start-timer") &&
+      !el.classList.contains("stop-timer")
+    ) {
+      el.classList.add(className);
+    }
+  });
+}
+
+function removeClassFromButtons(elements, className) {
+  elements.forEach(el => el.classList.remove(className));
 }

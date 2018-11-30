@@ -11,6 +11,15 @@ body {
   background: #ece4d8;
 }
 
+.light-switch-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.light-switch {
+  padding: 8px;
+}
+
 .stopwatches {
   margin-bottom: 30px;
 }
@@ -137,4 +146,16 @@ button:active {
   font-family: "Share Tech Mono", monospace;
   font-size: 3em;
   margin-bottom: 15px;
+}
+
+/* Dark Mode Elements */
+.dark-body {
+  background-color: rgb(36, 36, 36);
+  color: rgb(224, 224, 224);
+}
+
+.dark-button {
+  border: 2px solid rgb(255, 255, 255);
+  color: rgb(204, 204, 204);
+  background: transparent;
 }
