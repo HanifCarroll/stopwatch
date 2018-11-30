@@ -309,15 +309,17 @@ function removeSW() {
 function switchLights() {
   isDarkModeEnabled = !isDarkModeEnabled;
 
+  const bulbOff = "<i class='fas fa-lightbulb'></i>";
+  const bulbOn = "<i class='fas fa-lightbulb'></i>";
   const buttons = document.querySelectorAll("a");
   const { body } = document;
 
   if (isDarkModeEnabled) {
-    lightSwitch.textContent = "Light Mode";
+    lightSwitch.innerHTML = bulbOn;
     body.classList.add("dark-body");
     addClassToButtons(buttons, "dark-button");
   } else {
-    lightSwitch.textContent = "Dark Mode";
+    lightSwitch.innerHTML = bulbOff;
     body.classList.remove("dark-body");
     removeClassFromButtons(buttons, "dark-button");
   }
