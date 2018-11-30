@@ -9,13 +9,14 @@ const removeSWButton = document.querySelector(".remove");
 
 // Stopwatch and StopwatchContainer classes
 class Stopwatch {
-  constructor() {
+  constructor(stopwatchContainer) {
     this.time = {
       ms: 0,
       seconds: 0,
       minutes: 0,
       hours: 0,
     };
+    this.stopwatchContainer = stopwatchContainer;
     this.interval = null;
     this.isStarted = false;
     this.isTicking = false;
@@ -32,6 +33,7 @@ class Stopwatch {
     this.reset = this.reset.bind(this);
     this.onStartClick = this.onStartClick.bind(this);
     this.cleanUp = this.cleanUp.bind(this);
+    this.forceContainerUpdate = this.forceContainerUpdate.bind(this);
   }
 
   getTime() {
@@ -97,6 +99,7 @@ class Stopwatch {
     this.isTicking = true;
 
     this.setButtonText();
+    this.forceContainerUpdate();
   }
 
   pause() {
@@ -104,6 +107,7 @@ class Stopwatch {
       this.cleanUp();
       this.isTicking = false;
       this.setButtonText();
+      this.forceContainerUpdate();
     }
   }
 
@@ -122,6 +126,7 @@ class Stopwatch {
     this.time.hours = 0;
 
     this.updateDOM();
+    this.forceContainerUpdate();
   }
 
   cleanUp() {
@@ -144,6 +149,11 @@ class Stopwatch {
 
   onStartClick() {
     this.startButton.textContent === "Pause" ? this.pause() : this.start();
+    this.forceContainerUpdate();
+  }
+
+  forceContainerUpdate() {
+    this.stopwatchContainer.updateContainer();
   }
 }
 
@@ -155,7 +165,8 @@ class StopwatchContainer {
     this.pop = this.pop.bind(this);
     this.startAllWatches = this.startAllWatches.bind(this);
     this.resetAllWatches = this.resetAllWatches.bind(this);
-    this.areAnyWatchesTicking = this.areAnyWatchesTicking.bind(this);
+    this.allWatchesActive = this.allWatchesActive.bind(this);
+    this.updateContainer = this.updateContainer.bind(this);
   }
 
   push(stopwatch) {
@@ -171,40 +182,48 @@ class StopwatchContainer {
   }
 
   startAllWatches() {
-    if (!this.areAnyWatchesTicking()) {
+    if (!this.allWatchesActive()) {
       this.stopwatches.forEach(sw => {
         sw.start();
       });
-      startAllButton.textContent = "Pause All";
+      // startAllButton.textContent = "Pause All";
     } else {
       this.stopwatches.forEach(sw => {
         sw.pause();
       });
-      startAllButton.textContent = "Start All";
+      // startAllButton.textContent = "Start All";
     }
+    this.updateContainer();
   }
 
   resetAllWatches() {
     this.stopwatches.forEach(sw => sw.reset());
+    this.updateContainer();
   }
 
-  areAnyWatchesTicking() {
-    let status = false;
+  allWatchesActive() {
+    let status = true;
 
     this.stopwatches.forEach(sw => {
-      if (sw.isTicking) {
-        status = true;
+      if (!sw.isTicking) {
+        status = false;
       }
     });
 
     return status;
+  }
+
+  updateContainer() {
+    this.allWatchesActive()
+      ? (startAllButton.textContent = "Pause All")
+      : (startAllButton.textContent = "Start All");
   }
 }
 
 // Set-up the initial page view.
 
 const stopwatchContainer = new StopwatchContainer();
-const stopwatch = new Stopwatch();
+const stopwatch = new Stopwatch(stopwatchContainer);
 stopwatchContainer.push(stopwatch);
 
 stopwatch.timeText = timeText;
@@ -239,7 +258,7 @@ function createNewSW() {
   newResetButton.classList.add("reset", "button");
 
   // Create stopwatch and connect new elements to the instance.
-  const newStopwatch = new Stopwatch();
+  const newStopwatch = new Stopwatch(stopwatchContainer);
   stopwatchContainer.push(newStopwatch);
   newStopwatch.startButton = newStartButton;
   newStopwatch.resetButton = newResetButton;
@@ -256,6 +275,8 @@ function createNewSW() {
   // Append newly created section to the stopwatches section.
   const stopwatchesSection = document.querySelector(".stopwatches");
   stopwatchesSection.append(newSection);
+
+  stopwatchContainer.updateContainer();
 }
 
 function removeSW() {
