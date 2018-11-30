@@ -193,12 +193,10 @@ class StopwatchContainer {
       this.stopwatches.forEach(sw => {
         sw.start();
       });
-      // startAllButton.textContent = "Pause All";
     } else {
       this.stopwatches.forEach(sw => {
         sw.pause();
       });
-      // startAllButton.textContent = "Start All";
     }
     this.updateContainer();
   }
