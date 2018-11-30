@@ -1,9 +1,9 @@
 // All of the relevant elements.
+const timeText = document.querySelector(".time");
 const startButton = document.querySelector(".start");
 const resetButton = document.querySelector(".reset");
 const startAllButton = document.querySelector(".start-all");
 const resetAllButton = document.querySelector(".reset-all");
-const timeText = document.querySelector(".time");
 const addSWButton = document.querySelector(".add");
 const removeSWButton = document.querySelector(".remove");
 
