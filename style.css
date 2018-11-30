@@ -45,7 +45,7 @@ body {
   }
 }
 
-button {
+.button {
   border: 2px solid black;
   color: rgb(54, 54, 54);
   background: transparent;
@@ -55,14 +55,24 @@ button {
   font-weight: bold;
   font-family: "Roboto", sans-serif;
   line-height: 1.2;
-  padding: 10px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-button:hover {
+@media (min-width: 750px) {
+  .button {
+    padding: 10px;
+  }
+}
+
+.button:hover {
   cursor: pointer;
 }
 
-button:active {
+.button:active {
   transform: translateY(3px);
 }
 
@@ -70,10 +80,9 @@ button:active {
 .page-buttons {
   display: grid;
   grid-template-areas:
-    "switch switch"
-    "add remove"
-    "start-all reset-all";
-  width: 90%;
+    "add switch start-all"
+    "remove . reset-all";
+  width: 65%;
   margin: 30px auto 0 auto;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
@@ -81,18 +90,37 @@ button:active {
 
 @media (min-width: 750px) {
   .page-buttons {
-    grid-template-areas: "add start-all switch reset-all remove";
+    width: 50%;
+    grid-template-areas: "add remove switch start-all reset-all";
     grid-column-gap: 30px;
   }
 }
 
-.page-buttons > button:hover {
+.page-buttons > .button {
+  margin: 0 auto;
+  height: 50px;
+}
+
+.page-buttons > .button:hover {
   background-color: rgb(54, 54, 54);
   color: white;
 }
 
+.my-icon {
+  height: 30px;
+  width: 30px;
+}
+
 .light-switch {
+  position: relative;
   grid-area: switch;
+  top: 30px;
+}
+
+@media (min-width: 750px) {
+  .light-switch {
+    position: static;
+  }
 }
 
 .add {
@@ -115,7 +143,7 @@ button:active {
 .reset-all,
 .add,
 .remove {
-  min-width: 130px;
+  width: 50px;
 }
 /* Page Controls */
 

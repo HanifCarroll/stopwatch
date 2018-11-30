@@ -1,4 +1,5 @@
 let isDarkModeEnabled = false;
+
 // All of the relevant elements.
 const lightSwitch = document.querySelector(".light-switch");
 const addSWButton = document.querySelector(".add");
@@ -221,9 +222,11 @@ class StopwatchContainer {
   }
 
   updateContainer() {
+    const startIcon = "<i class='fas fa-play'></i>";
+    const pauseIcon = "<i class='fas fa-pause'></i>";
     this.allWatchesActive()
-      ? (startAllButton.textContent = "Pause All")
-      : (startAllButton.textContent = "Start All");
+      ? (startAllButton.innerHTML = pauseIcon)
+      : (startAllButton.innerHTML = startIcon);
   }
 }
 
@@ -250,8 +253,8 @@ function createNewSW() {
   const newSection = document.createElement("section");
   const newTimeText = document.createElement("p");
   const newButtonDiv = document.createElement("div");
-  const newStartButton = document.createElement("button");
-  const newResetButton = document.createElement("button");
+  const newStartButton = document.createElement("a");
+  const newResetButton = document.createElement("a");
 
   // Set text on new elements.
   newTimeText.textContent = "00:00:00:00";
@@ -262,11 +265,11 @@ function createNewSW() {
   newSection.classList.add("stopwatch");
   newTimeText.classList.add("time");
   newButtonDiv.classList.add("buttons");
-  newStartButton.classList.add("start", "start-timer");
+  newStartButton.classList.add("start", "start-timer", "button");
   if (isDarkModeEnabled) {
-    newResetButton.classList.add("reset", "dark-button");
+    newResetButton.classList.add("reset", "dark-button", "button");
   } else {
-    newResetButton.classList.add("reset");
+    newResetButton.classList.add("reset", "button");
   }
 
   // Create stopwatch and connect new elements to the instance.
@@ -306,7 +309,7 @@ function removeSW() {
 function switchLights() {
   isDarkModeEnabled = !isDarkModeEnabled;
 
-  const buttons = document.querySelectorAll("button");
+  const buttons = document.querySelectorAll("a");
   const { body } = document;
 
   if (isDarkModeEnabled) {
