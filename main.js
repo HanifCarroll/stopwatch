@@ -24,10 +24,12 @@ class Stopwatch {
     this.isStarted = false;
     this.isTicking = false;
 
+    // HTML elements that correspond to the instance.
     this.timeText = null;
     this.startButton = null;
     this.resetButton = null;
 
+    // Bind methods to the instance.
     this.tick = this.tick.bind(this);
     this.updateClock = this.updateClock.bind(this);
     this.setButtonText = this.setButtonText.bind(this);
@@ -72,6 +74,7 @@ class Stopwatch {
 
   updateClock() {
     this.time.ms += 1;
+
     if (this.time.ms === 100) {
       this.time.ms = 0;
       this.time.seconds++;
@@ -93,6 +96,7 @@ class Stopwatch {
   }
 
   start() {
+    // Prevent intervals from piling up.
     if (this.interval) {
       this.cleanUp();
     }
@@ -171,23 +175,23 @@ class StopwatchContainer {
   constructor() {
     this.stopwatches = [];
 
-    this.push = this.push.bind(this);
-    this.pop = this.pop.bind(this);
+    this.addStopwatch = this.addStopwatch.bind(this);
+    this.removeStopwatch = this.removeStopwatch.bind(this);
     this.startAllWatches = this.startAllWatches.bind(this);
     this.resetAllWatches = this.resetAllWatches.bind(this);
     this.allWatchesActive = this.allWatchesActive.bind(this);
     this.updateContainer = this.updateContainer.bind(this);
   }
 
-  push(stopwatch) {
+  addStopwatch(stopwatch) {
     this.stopwatches.push(stopwatch);
   }
 
-  pop() {
+  removeStopwatch() {
     let deletedStopwatch = this.stopwatches[this.stopwatches.length - 1];
+
     deletedStopwatch.cleanUp();
     this.stopwatches[this.stopwatches.length - 1] = null;
-
     this.stopwatches.pop();
   }
 
@@ -234,7 +238,8 @@ class StopwatchContainer {
 
 const stopwatchContainer = new StopwatchContainer();
 const stopwatch = new Stopwatch(stopwatchContainer);
-stopwatchContainer.push(stopwatch);
+
+stopwatchContainer.addStopwatch(stopwatch);
 
 stopwatch.timeText = timeText;
 stopwatch.startButton = startButton;
@@ -266,15 +271,14 @@ function createNewSW() {
   newTimeText.classList.add("time");
   newButtonDiv.classList.add("buttons");
   newStartButton.classList.add("start", "start-timer", "button");
+  newResetButton.classList.add("reset", "button");
   if (isDarkModeEnabled) {
-    newResetButton.classList.add("reset", "dark-button", "button");
-  } else {
-    newResetButton.classList.add("reset", "button");
+    newResetButton.classList.add("dark-button");
   }
 
   // Create stopwatch and connect new elements to the instance.
   const newStopwatch = new Stopwatch(stopwatchContainer);
-  stopwatchContainer.push(newStopwatch);
+  stopwatchContainer.addStopwatch(newStopwatch);
   newStopwatch.startButton = newStartButton;
   newStopwatch.resetButton = newResetButton;
   newStopwatch.timeText = newTimeText;
@@ -300,9 +304,9 @@ function removeSW() {
 
   if (stopwatchSections.length > 1) {
     const lastStopwatch = stopwatchSections[stopwatchSections.length - 1];
-    stopwatchesSection.removeChild(lastStopwatch);
 
-    stopwatchContainer.pop();
+    stopwatchesSection.removeChild(lastStopwatch);
+    stopwatchContainer.removeStopwatch();
   }
 }
 
@@ -316,26 +320,22 @@ function switchLights() {
 
   if (isDarkModeEnabled) {
     lightSwitch.innerHTML = bulbOn;
-    body.classList.add("dark-body");
-    addClassToButtons(buttons, "dark-button");
+    body.classList.toggle("dark-body");
+    toggleButtonsClass(buttons, "dark-button");
   } else {
     lightSwitch.innerHTML = bulbOff;
-    body.classList.remove("dark-body");
-    removeClassFromButtons(buttons, "dark-button");
+    body.classList.toggle("dark-body");
+    toggleButtonsClass(buttons, "dark-button");
   }
 }
 
-function addClassToButtons(elements, className) {
+function toggleButtonsClass(elements, className) {
   elements.forEach(el => {
     if (
       !el.classList.contains("start-timer") &&
       !el.classList.contains("stop-timer")
     ) {
-      el.classList.add(className);
+      el.classList.toggle(className);
     }
   });
-}
-
-function removeClassFromButtons(elements, className) {
-  elements.forEach(el => el.classList.remove(className));
 }
