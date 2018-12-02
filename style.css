@@ -19,6 +19,7 @@ body {
   .stopwatches {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
 }
 
