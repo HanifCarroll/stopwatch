@@ -10,6 +10,12 @@ const timeText = document.querySelector(".time");
 const startButton = document.querySelector(".start");
 const resetButton = document.querySelector(".reset");
 
+// Icons
+const START_ICON = "<i class='fas fa-play'></i>";
+const PAUSE_ICON = "<i class='fas fa-pause'></i>";
+const BULB_OFF = "<i class='fas fa-lightbulb'></i>";
+const BULB_ON = "<i class='fas fa-lightbulb'></i>";
+
 // Stopwatch and StopwatchContainer classes
 class Stopwatch {
   constructor(stopwatchContainer) {
@@ -20,6 +26,7 @@ class Stopwatch {
       hours: 0,
     };
     this.stopwatchContainer = stopwatchContainer;
+    this.stopwatchContainer.addStopwatch(this);
     this.interval = null;
     this.isStarted = false;
     this.isTicking = false;
@@ -43,28 +50,11 @@ class Stopwatch {
 
   getTime() {
     const { ms, seconds, minutes, hours } = this.time;
-    let formatMs = ms;
-    let formatSeconds = seconds;
-    let formatMinutes = minutes;
-    let formatHours = hours;
+    const timeValues = [ms, seconds, minutes, hours];
 
-    if (ms < 10) {
-      formatMs = `0${ms}`;
-    }
-
-    if (seconds < 10) {
-      formatSeconds = `0${seconds}`;
-    }
-
-    if (minutes < 10) {
-      formatMinutes = `0${minutes}`;
-    }
-
-    if (hours < 10) {
-      formatHours = `0${hours}`;
-    }
-
-    return `${formatHours}:${formatMinutes}:${formatSeconds}:${formatMs}`;
+    return timeValues.map(value => value < 10 ? `0${value}` : value)
+      .reverse()
+      .join(':');
   }
 
   tick() {
@@ -123,15 +113,14 @@ class Stopwatch {
       this.cleanUp();
     }
 
-    this.isStarted = false;
-    this.isTicking = false;
-    this.setButtonText();
-
     this.time.ms = 0;
     this.time.seconds = 0;
     this.time.minutes = 0;
     this.time.hours = 0;
+    this.isStarted = false;
+    this.isTicking = false;
 
+    this.setButtonText();
     this.updateDOM();
     this.forceContainerUpdate();
   }
@@ -162,7 +151,6 @@ class Stopwatch {
 
   onStartClick() {
     this.startButton.textContent === "Pause" ? this.pause() : this.start();
-
     this.forceContainerUpdate();
   }
 
@@ -188,23 +176,21 @@ class StopwatchContainer {
   }
 
   removeStopwatch() {
-    let deletedStopwatch = this.stopwatches[this.stopwatches.length - 1];
+    if (this.stopwatches.length === 1) {
+      return;
+    }
 
-    deletedStopwatch.cleanUp();
-    this.stopwatches[this.stopwatches.length - 1] = null;
+    const indexToDelete = this.stopwatches.length - 1;
+    this.stopwatches[indexToDelete].cleanUp();
+    this.stopwatches[indexToDelete] = null;
     this.stopwatches.pop();
+    this.updateContainer();
   }
 
   startAllWatches() {
-    if (!this.allWatchesActive()) {
-      this.stopwatches.forEach(sw => {
-        sw.start();
-      });
-    } else {
-      this.stopwatches.forEach(sw => {
-        sw.pause();
-      });
-    }
+    !this.allWatchesActive() 
+      ? this.stopwatches.forEach(sw => sw.start())
+      : this.stopwatches.forEach(sw => sw.pause())
     this.updateContainer();
   }
 
@@ -214,23 +200,13 @@ class StopwatchContainer {
   }
 
   allWatchesActive() {
-    let status = true;
-
-    this.stopwatches.forEach(sw => {
-      if (!sw.isTicking) {
-        status = false;
-      }
-    });
-
-    return status;
+    return this.stopwatches.every(sw => sw.isTicking);
   }
 
   updateContainer() {
-    const startIcon = "<i class='fas fa-play'></i>";
-    const pauseIcon = "<i class='fas fa-pause'></i>";
     this.allWatchesActive()
-      ? (startAllButton.innerHTML = pauseIcon)
-      : (startAllButton.innerHTML = startIcon);
+      ? (startAllButton.innerHTML = PAUSE_ICON)
+      : (startAllButton.innerHTML = START_ICON);
   }
 }
 
@@ -238,8 +214,6 @@ class StopwatchContainer {
 
 const stopwatchContainer = new StopwatchContainer();
 const stopwatch = new Stopwatch(stopwatchContainer);
-
-stopwatchContainer.addStopwatch(stopwatch);
 
 stopwatch.timeText = timeText;
 stopwatch.startButton = startButton;
@@ -254,7 +228,7 @@ startButton.addEventListener("click", stopwatch.onStartClick);
 resetButton.addEventListener("click", stopwatch.reset);
 
 function createNewSW() {
-  // Create new elements.
+  // Create elements representing new stopwatch.
   const newSection = document.createElement("section");
   const newTimeText = document.createElement("p");
   const newButtonDiv = document.createElement("div");
@@ -278,7 +252,6 @@ function createNewSW() {
 
   // Create stopwatch and connect new elements to the instance.
   const newStopwatch = new Stopwatch(stopwatchContainer);
-  stopwatchContainer.addStopwatch(newStopwatch);
   newStopwatch.startButton = newStartButton;
   newStopwatch.resetButton = newResetButton;
   newStopwatch.timeText = newTimeText;
@@ -313,17 +286,15 @@ function removeSW() {
 function switchLights() {
   isDarkModeEnabled = !isDarkModeEnabled;
 
-  const bulbOff = "<i class='fas fa-lightbulb'></i>";
-  const bulbOn = "<i class='fas fa-lightbulb'></i>";
   const buttons = document.querySelectorAll("a");
   const { body } = document;
 
   if (isDarkModeEnabled) {
-    lightSwitch.innerHTML = bulbOn;
+    lightSwitch.innerHTML = BULB_ON;
     body.classList.toggle("dark-body");
     toggleButtonsClass(buttons, "dark-button");
   } else {
-    lightSwitch.innerHTML = bulbOff;
+    lightSwitch.innerHTML = BULB_OFF;
     body.classList.toggle("dark-body");
     toggleButtonsClass(buttons, "dark-button");
   }
